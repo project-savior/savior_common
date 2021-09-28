@@ -10,6 +10,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
@@ -27,12 +28,14 @@ import java.util.TimeZone;
 /**
  * @author 22454
  */
+@Slf4j
 @Configuration
 @ConditionalOnClass(ObjectMapper.class)
 @AutoConfigureBefore(JacksonAutoConfiguration.class)
 public class ObjectMapperConfig {
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer customizer() {
+        log.info("正在配置ObjectMapper");
         return builder -> {
             builder.locale(Locale.CHINA);
             builder.timeZone(TimeZone.getTimeZone("Asia/Shanghai"));

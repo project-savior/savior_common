@@ -14,6 +14,10 @@ public enum StandardResponse {
      */
     OK(200, "ok"),
     /**
+     * 禁止直接访问后端服务
+     */
+    FORBIDDEN(403, "access denied"),
+    /**
      * 请求异常
      */
     ERROR(500, "业务异常,请稍后重试");
