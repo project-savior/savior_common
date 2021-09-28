@@ -1,31 +1,37 @@
 package com.jerry.savior_common.response;
 
 
-import com.jerry.savior_common.constants.CommonResponseCode;
+import com.jerry.savior_common.constants.StandardResponse;
+import lombok.Data;
 
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalTime;
+import java.util.Date;
 
 /**
  * @author 22454
  */
+@Data
 public final class CommonResponse<T> implements Serializable {
     private Integer code;
     private String message;
     private T data;
 
-    public static <T> CommonResponse<T> success(T data) {
-        return CommonResponse.create(data, "success");
+    public static <T> CommonResponse<T> build() {
+        return CommonResponse.build(null, StandardResponse.OK.getMessage());
     }
 
-    public static <T> CommonResponse<T> success() {
-        return CommonResponse.create(null, "success");
+    public static <T> CommonResponse<T> build(T data) {
+        return CommonResponse.build(data, StandardResponse.OK.getMessage());
     }
 
-    public static <T> CommonResponse<T> create(T data, String message) {
-        return CommonResponse.create(CommonResponseCode.SUCCESS_CODE, data, message);
+
+    public static <T> CommonResponse<T> build(T data, String message) {
+        return CommonResponse.build(StandardResponse.OK.getCode(), data, message);
     }
 
-    public static <T> CommonResponse<T> create(Integer code, T data, String message) {
+    public static <T> CommonResponse<T> build(Integer code, T data, String message) {
         CommonResponse<T> commonResponse = new CommonResponse<T>();
         commonResponse.setCode(code);
         commonResponse.setMessage(message);
@@ -34,30 +40,6 @@ public final class CommonResponse<T> implements Serializable {
     }
 
     public boolean isSuccess() {
-        return CommonResponseCode.SUCCESS_CODE.equals(code);
-    }
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
+        return StandardResponse.OK.getCode().equals(code);
     }
 }
