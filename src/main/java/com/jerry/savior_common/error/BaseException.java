@@ -6,6 +6,9 @@ import com.jerry.savior_common.interfaces.IResponseEnum;
 import java.text.MessageFormat;
 
 
+/**
+ * @author 22454
+ */
 public class BaseException extends RuntimeException implements IResponseEnum {
     private final Integer code;
     private final String message;
