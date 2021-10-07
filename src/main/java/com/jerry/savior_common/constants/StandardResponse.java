@@ -13,9 +13,17 @@ public enum StandardResponse implements BusinessExceptionAssert {
      */
     OK(200, "ok"),
     /**
+     * 服务端无法理解的请求
+     */
+    BAD_REQUEST(400, "Bad Request"),
+    /**
      * 禁止直接访问后端服务
      */
-    FORBIDDEN(403, "access denied"),
+    FORBIDDEN(403, "Access Denied"),
+    /**
+     * 找不到对应请求
+     */
+    NOT_FOUND(404, "Not Found"),
     /**
      * 请求异常
      */
