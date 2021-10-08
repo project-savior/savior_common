@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author 22454
  */
 public class DefaultTokenExtractor implements TokenExtractor {
-    private static final String HEADER_ATTRIBUTE_NAME = "auth";
+    public static final String HEADER_ATTRIBUTE_NAME = "auth";
 
     @Override
     public String getTokenFromRequest(HttpServletRequest request) {

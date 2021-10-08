@@ -22,7 +22,7 @@ public class BaseException extends RuntimeException implements IResponseEnum {
     }
 
     @Override
-    public int getCode() {
+    public Integer getCode() {
         return code;
     }
 
