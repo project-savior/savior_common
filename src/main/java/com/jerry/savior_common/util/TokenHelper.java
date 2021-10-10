@@ -1,7 +1,9 @@
 package com.jerry.savior_common.util;
 
+import com.jerry.savior_common.defaultImpl.DefaultTokenExtractor;
 import com.jerry.savior_common.interfaces.TokenExtractor;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +21,7 @@ import java.util.function.Function;
 @Slf4j
 public class TokenHelper {
     /**
-     * token 过期时长
+     * token 过期时长,单位（s）
      */
     private final Long tokenExpire;
 
@@ -61,8 +63,11 @@ public class TokenHelper {
     public String buildToken(String subject, Map<String, Object> claims) {
         Date now = new Date();
         Date expirationDate = new Date(now.getTime() + tokenExpire);
-        return Jwts.builder()
-                .setClaims(claims)
+        JwtBuilder builder = Jwts.builder();
+        if (claims != null) {
+            builder.setClaims(claims);
+        }
+        return builder
                 .setSubject(subject)
                 .setIssuedAt(now)
                 .setExpiration(expirationDate)
@@ -149,5 +154,7 @@ public class TokenHelper {
                 .getBody();
     }
 
-
+    public Long getTokenExpire() {
+        return tokenExpire;
+    }
 }
