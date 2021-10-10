@@ -112,7 +112,7 @@ public class TokenHelper {
      * @param request request
      * @return token
      */
-    private String getTokenFromRequest(HttpServletRequest request) {
+    public String getTokenFromRequest(HttpServletRequest request) {
         return this.parser.getTokenFromRequest(request);
     }
 
