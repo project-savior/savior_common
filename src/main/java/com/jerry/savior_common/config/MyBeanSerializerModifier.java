@@ -79,6 +79,12 @@ public class MyBeanSerializerModifier extends BeanSerializerModifier {
         return Boolean.class.isAssignableFrom(rawClass);
     }
 
+    /**
+     * 是否日期类型
+     *
+     * @param writer writer
+     * @return true/false
+     */
     private boolean isDate(BeanPropertyWriter writer) {
         Class<?> rawClass = writer.getType().getRawClass();
         return Date.class.isAssignableFrom(rawClass);
