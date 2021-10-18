@@ -1,9 +1,11 @@
 package com.jerry.savior_common.util;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,8 +16,7 @@ import org.springframework.stereotype.Component;
 public class ObjectMapperHelper {
     private final ObjectMapper mapper;
 
-    @Autowired
-    public ObjectMapperHelper(ObjectMapper mapper) {
+    public ObjectMapperHelper(@Qualifier("mapper") ObjectMapper mapper) {
         this.mapper = mapper;
     }
 

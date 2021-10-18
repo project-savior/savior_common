@@ -1,6 +1,5 @@
 package com.jerry.savior_common.util;
 
-import com.jerry.savior_common.defaultImpl.DefaultTokenExtractor;
 import com.jerry.savior_common.interfaces.TokenExtractor;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
@@ -8,7 +7,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -76,6 +74,21 @@ public class TokenHelper {
     }
 
     /**
+     * 获取subject
+     *
+     * @param token token
+     * @return subject
+     */
+    public String getSubject(String token) {
+        try {
+            return (String) extractClaims(token, (Function<Claims, Object>) Claims::getSubject);
+        } catch (Exception e) {
+            log.warn("解析token失败，原因：{}", e.getMessage());
+            return null;
+        }
+    }
+
+    /**
      * token是否过期
      *
      * @param token token
@@ -122,7 +135,7 @@ public class TokenHelper {
      * @param token token
      * @return 过期时间
      */
-    private Date extractExpiration(String token) {
+    public Date extractExpiration(String token) {
         return extractClaims(token, Claims::getExpiration);
     }
 
@@ -135,7 +148,7 @@ public class TokenHelper {
      * @param <T>            数据类型
      * @return claims
      */
-    private <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
+    public <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
         Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
@@ -146,7 +159,7 @@ public class TokenHelper {
      * @param token token
      * @return 所有的claims
      */
-    private Claims extractAllClaims(String token) {
+    public Claims extractAllClaims(String token) {
         return Jwts
                 .parser()
                 .setSigningKey(tokenSecretKey)
