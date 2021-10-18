@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,6 +22,12 @@ public class MyBeanSerializerModifier extends BeanSerializerModifier {
                 beanPropertyWriter.assignNullSerializer(new CustomizeNullSerializer.NullArraySerializer());
             } else if (isString(beanPropertyWriter)) {
                 beanPropertyWriter.assignNullSerializer(new CustomizeNullSerializer.NullStringSerializer());
+            } else if (isNumber(beanPropertyWriter)) {
+                beanPropertyWriter.assignNullSerializer(new CustomizeNullSerializer.NullNumberSerializer());
+            } else if (isBoolean(beanPropertyWriter)) {
+                beanPropertyWriter.assignNullSerializer(new CustomizeNullSerializer.NullBooleanSerializer());
+            } else if (isDate(beanPropertyWriter)) {
+                beanPropertyWriter.assignNullSerializer(new CustomizeNullSerializer.NullDateSerializer());
             }
         }
         return beanProperties;
@@ -70,5 +77,10 @@ public class MyBeanSerializerModifier extends BeanSerializerModifier {
     private boolean isBoolean(BeanPropertyWriter writer) {
         Class<?> rawClass = writer.getType().getRawClass();
         return Boolean.class.isAssignableFrom(rawClass);
+    }
+
+    private boolean isDate(BeanPropertyWriter writer) {
+        Class<?> rawClass = writer.getType().getRawClass();
+        return Date.class.isAssignableFrom(rawClass);
     }
 }

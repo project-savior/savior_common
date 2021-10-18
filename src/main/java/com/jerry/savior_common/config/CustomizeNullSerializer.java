@@ -61,4 +61,14 @@ public class CustomizeNullSerializer {
             jsonGenerator.writeEndObject();
         }
     }
+
+    /**
+     * date null 序列化器
+     */
+    public static class NullDateSerializer extends JsonSerializer<Object>{
+        @Override
+        public void serialize(Object o, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+            jsonGenerator.writeString("1000-01-01 00:00:00");
+        }
+    }
 }
