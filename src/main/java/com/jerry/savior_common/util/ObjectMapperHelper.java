@@ -1,9 +1,12 @@
 package com.jerry.savior_common.util;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jerry.savior_common.interfaces.Callable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,8 +17,7 @@ import org.springframework.stereotype.Component;
 public class ObjectMapperHelper {
     private final ObjectMapper mapper;
 
-    @Autowired
-    public ObjectMapperHelper(ObjectMapper mapper) {
+    public ObjectMapperHelper(@Qualifier("mapper") ObjectMapper mapper) {
         this.mapper = mapper;
     }
 
@@ -44,5 +46,13 @@ public class ObjectMapperHelper {
             log.warn("反序列化失败，原因：", e);
             return null;
         }
+    }
+
+    public <T> T parseJson(Callable<String> jsonCallable, Class<T> cls) {
+        return parseJson(jsonCallable.call(), cls);
+    }
+
+    public <T> T parseJson(Callable<String> jsonCallable, TypeReference<T> typeReference) {
+        return parseJson(jsonCallable.call(), typeReference);
     }
 }

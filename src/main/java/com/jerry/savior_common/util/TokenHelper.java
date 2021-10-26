@@ -2,11 +2,11 @@ package com.jerry.savior_common.util;
 
 import com.jerry.savior_common.interfaces.TokenExtractor;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -19,7 +19,7 @@ import java.util.function.Function;
 @Slf4j
 public class TokenHelper {
     /**
-     * token 过期时长
+     * token 过期时长,单位（s）
      */
     private final Long tokenExpire;
 
@@ -61,13 +61,31 @@ public class TokenHelper {
     public String buildToken(String subject, Map<String, Object> claims) {
         Date now = new Date();
         Date expirationDate = new Date(now.getTime() + tokenExpire);
-        return Jwts.builder()
-                .setClaims(claims)
+        JwtBuilder builder = Jwts.builder();
+        if (claims != null) {
+            builder.setClaims(claims);
+        }
+        return builder
                 .setSubject(subject)
                 .setIssuedAt(now)
                 .setExpiration(expirationDate)
                 .signWith(SignatureAlgorithm.HS256, tokenSecretKey)
                 .compact();
+    }
+
+    /**
+     * 获取subject
+     *
+     * @param token token
+     * @return subject
+     */
+    public String getSubject(String token) {
+        try {
+            return (String) extractClaims(token, (Function<Claims, Object>) Claims::getSubject);
+        } catch (Exception e) {
+            log.warn("解析token失败，原因：{}", e.getMessage());
+            return null;
+        }
     }
 
     /**
@@ -107,7 +125,7 @@ public class TokenHelper {
      * @param request request
      * @return token
      */
-    private String getTokenFromRequest(HttpServletRequest request) {
+    public String getTokenFromRequest(HttpServletRequest request) {
         return this.parser.getTokenFromRequest(request);
     }
 
@@ -117,7 +135,7 @@ public class TokenHelper {
      * @param token token
      * @return 过期时间
      */
-    private Date extractExpiration(String token) {
+    public Date extractExpiration(String token) {
         return extractClaims(token, Claims::getExpiration);
     }
 
@@ -130,7 +148,7 @@ public class TokenHelper {
      * @param <T>            数据类型
      * @return claims
      */
-    private <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
+    public <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
         Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
@@ -141,7 +159,7 @@ public class TokenHelper {
      * @param token token
      * @return 所有的claims
      */
-    private Claims extractAllClaims(String token) {
+    public Claims extractAllClaims(String token) {
         return Jwts
                 .parser()
                 .setSigningKey(tokenSecretKey)
@@ -149,5 +167,7 @@ public class TokenHelper {
                 .getBody();
     }
 
-
+    public Long getTokenExpire() {
+        return tokenExpire;
+    }
 }
